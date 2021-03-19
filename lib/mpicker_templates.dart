@@ -27,21 +27,20 @@ class MapPickerTemplate {
 
     return await showDialog(
         context: context,
-        builder: (c) => AspectRatio(
-              aspectRatio: aspectRatio,
-              child: Container(
-                  margin: EdgeInsets.only(bottom: 60),
-                  child: AlertDialog(content: content, actions: [
-                    TextButton(
-                        child: Text(btnCancel),
-                        onPressed: () {
-                          Navigator.pop(context);
-                          content.dispose();
-                        }),
-                    TextButton(
-                        child: Text(btnSave),
-                        onPressed: () async => await content.pop(context))
-                  ])),
-            ));
+        builder: (c) => Container(
+            margin: EdgeInsets.only(bottom: 60),
+            child: AlertDialog(
+                content: AspectRatio(aspectRatio: aspectRatio, child: content),
+                actions: [
+                  TextButton(
+                      child: Text(btnCancel),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        content.dispose();
+                      }),
+                  TextButton(
+                      child: Text(btnSave),
+                      onPressed: () async => await content.pop(context))
+                ])));
   }
 }

@@ -36,7 +36,7 @@ class MainScreen extends StatelessWidget {
 
             /// # Language of return of google maps api
             lang: 'pt-BR'),
-        key: 'AIzaSyDOH1nez80tPwRmA2ayUIdrLTC5dkG0Wvc');
+        key: 'API_KEY_GOOGLE_MAPS');
 
     /// # Here a example to get address by a dialog
     return Scaffold(

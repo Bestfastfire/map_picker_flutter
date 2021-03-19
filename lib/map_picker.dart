@@ -101,7 +101,8 @@ class MapPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
-    return Stack(
+    return Scaffold(
+        body: Stack(
       children: [
         Center(
           child: Listener(
@@ -215,6 +216,6 @@ class MapPicker extends StatelessWidget {
                                 ],
                               )))))
       ],
-    );
+    ));
   }
 }
