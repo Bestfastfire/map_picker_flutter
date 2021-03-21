@@ -129,7 +129,7 @@ class MapPicker extends StatelessWidget {
         ),
         Center(
             child: marker ??
-                Image.asset('assets/images/icons/ic_location.png',
+                Image.asset('assets/ic_location.png',
                     height: 50, width: 50)),
         Positioned(
             right: 0,
