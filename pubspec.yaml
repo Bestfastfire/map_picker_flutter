@@ -1,6 +1,6 @@
 name: map_picker_flutter
 description: Get the address quickly and easily from Google Map in Web, Desktop and Mobile.
-version: 1.0.0+3
+version: 1.0.0+4
 homepage: https://github.com/Bestfastfire/map_picker_flutter
 
 environment:
