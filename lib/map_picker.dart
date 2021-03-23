@@ -93,7 +93,7 @@ class MapPicker extends StatelessWidget {
   dispose() => controller.dispose();
 
   Future pop(context) async {
-    Navigator.pop(context, controller.currentAddress);
+    Navigator.pop(context, controller.popAddress);
     dispose();
   }
 
