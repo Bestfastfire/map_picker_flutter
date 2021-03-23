@@ -1,3 +1,5 @@
+## [1.0.0+5] - Fix method return
+
 ## [1.0.0+4] - Fix marker asset
 
 ## [1.0.0+3] - Fix marker

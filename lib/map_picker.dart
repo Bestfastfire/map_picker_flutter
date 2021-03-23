@@ -130,8 +130,7 @@ class MapPicker extends StatelessWidget {
         Center(
             child: marker ??
                 Image.asset('assets/ic_location.png',
-                    package: 'map_picker_flutter',
-                    height: 50, width: 50)),
+                    package: 'map_picker_flutter', height: 50, width: 50)),
         Positioned(
             right: 0,
             left: 0,
