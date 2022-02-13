@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:latlng/latlng.dart';
 
 class MPickerTheme {
   final LatLng initialLocation;
   final double zoom;
 
-  final String lang;
+  final String? lang;
 
   final String errorAddressMissing;
   final String errorToFindAddress;
@@ -15,7 +14,7 @@ class MPickerTheme {
   final String searchHint;
 
   MPickerTheme(
-      {@required this.initialLocation,
+      {required this.initialLocation,
       this.zoom = 11,
       this.lang,
       this.errorToFindAddress = 'Error to find this address, try again.',

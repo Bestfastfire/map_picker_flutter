@@ -17,27 +17,31 @@ class MPickerController with _Base {
       'https://maps.googleapis.com/maps/api/geocode/json?latlng=[LAT],[LON]';
 
   final _progress = BehaviorSubject<bool>.seeded(false);
-  final _address = BehaviorSubject<MPAddress>();
+  final _address = BehaviorSubject<MPAddress?>();
   final MapController ctMap;
   final MPickerTheme theme;
   final String key;
 
   final searchControl = TextEditingController();
 
-  Stream<MPAddress> get outStreamAddress => _address.stream;
+  Stream<MPAddress?> get outStreamAddress => _address.stream;
   Stream<bool> get outStreamProgress => _progress.stream;
   double _scaleStart = 1.0;
   c.bool _hasError = true;
-  Offset _dragStart;
+  Offset? _dragStart;
 
-  String get currentAddress => _address?.value?.formattedAddress;
-  MPAddress get popAddress => _hasError ? null : _address.value;
+  String get currentAddress => _address.value?.formattedAddress ?? '-';
+  MPAddress? get popAddress => _hasError ? null : _address.value;
 
   MPickerController(
-      {@required this.key, @required this.theme, @required this.ctMap});
+      {required this.key, required this.theme, required this.ctMap});
 
   /// Go To place with latLng
-  goTo(LatLng latLng) => ctMap.center = latLng;
+  goTo(LatLng? latLng) {
+    if (latLng != null) {
+      ctMap.center = latLng;
+    }
+  }
 
   /// Go To initial place again
   goToInitial() => goTo(theme.initialLocation);
@@ -62,7 +66,7 @@ class MPickerController with _Base {
       ctMap.zoom -= 0.02;
     } else {
       final now = details.focalPoint;
-      final diff = now - _dragStart;
+      final diff = now - (_dragStart ?? Offset(0, 0));
       _dragStart = now;
       ctMap.drag(diff.dx, diff.dy);
     }
@@ -88,9 +92,9 @@ class MPickerController with _Base {
   }
 
   String _replaceIt(
-          {@required String text, @required c.Map<String, String> remove}) =>
-      remove.keys.fold<String>(
-          text, (text, element) => text.replaceAll(element, remove[element]));
+          {required String text, required c.Map<String, String> remove}) =>
+      remove.keys.fold<String>(text,
+          (text, element) => text.replaceAll(element, remove[element] ?? ''));
 
   String _getExtraArgs() =>
       (theme.lang != null ? '&language=${theme.lang}' : '') + '&key=$key';
@@ -133,8 +137,7 @@ class MPickerController with _Base {
           formattedAddress: _extractAddress(resp),
           latLng: _extractLatLng(resp)));
     } catch (msg) {
-      _address.sink.add(
-          MPAddress(formattedAddress: theme.errorToFindAddress, latLng: null));
+      _address.sink.add(MPAddress(formattedAddress: theme.errorToFindAddress));
       _hasError = true;
     }
 
@@ -167,7 +170,7 @@ class MPickerController with _Base {
     }
   }
 
-  LatLng _extractLatLng(Response resp) {
+  LatLng? _extractLatLng(Response resp) {
     try {
       if (resp.data != null && resp.data['status'] == 'OK') {
         final address = resp.data['results'];

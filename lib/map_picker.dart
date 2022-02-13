@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
 import 'package:map_picker_flutter/mpicker_address.dart';
 import 'mpicker_controller.dart';
 import 'package:map/map.dart';
@@ -10,33 +9,35 @@ export 'mpicker_templates.dart';
 export 'mpicker_address.dart';
 export 'mpicker_theme.dart';
 
+import 'package:flutter/material.dart';
+
 class MapPicker extends StatelessWidget {
   /// Global theme
-  static MPickerTheme _gTheme;
+  static late MPickerTheme _gTheme;
 
   /// Global searchBuilder Widget
-  static Widget Function(Function(String address) search) _searchBuilder;
+  static Widget Function(Function(String address) search)? _searchBuilder;
 
   /// Global addressBuilder Widget
-  static Widget Function(String address, Function done) _addressBuilder;
+  static Widget Function(String address, Function done)? _addressBuilder;
 
   /// Global progressDialog Widget
-  static Widget _progressWidget;
+  static Widget? _progressWidget;
 
   /// Global marker widget
-  static Widget _markerWidget;
+  static Widget? _markerWidget;
 
   /// Google Maps API KEY
-  static String _key;
+  static late String _key;
 
   /// # It need be called before you use this lib passing the theme and the Google Maps API KEY
   static init(
-      {Widget Function(Function(String address) search) searchBuilder,
-      Widget Function(String address, Function done) addressBuilder,
-      Widget progressWidget,
-      Widget marker,
-      @required MPickerTheme theme,
-      @required String key}) {
+      {Widget Function(Function(String address) search)? searchBuilder,
+      Widget Function(String address, Function done)? addressBuilder,
+      Widget? progressWidget,
+      Widget? marker,
+      required MPickerTheme theme,
+      required String key}) {
     MapPicker._addressBuilder = addressBuilder;
     MapPicker._progressWidget = progressWidget;
     MapPicker._searchBuilder = searchBuilder;
@@ -46,31 +47,32 @@ class MapPicker extends StatelessWidget {
   }
 
   /// Same of global variables but here case you want change in a specific called
-  final Widget Function(Function(String address) search) searchBuilder;
-  final Widget Function(String address, Function done) addressBuilder;
+  final Widget Function(Function(String address) search)? searchBuilder;
+  final Widget Function(String address, Function done)? addressBuilder;
   final MPickerController controller;
-  final Widget progressWidget;
+  final Widget? progressWidget;
   final MPickerTheme theme;
-  final Widget marker;
+  final Widget? marker;
 
   factory MapPicker({
     /// Custom search Builder Widget, case it is null, will be used the global or default
-    Widget Function(Function(String address) search) searchBuilder,
+    Widget Function(Function(String address) search)? searchBuilder,
 
     /// Custom address Builder Widget, case it is null, will be used the global or default
-    Widget Function(String address, Function done) addressBuilder,
+    Widget Function(String address, Function done)? addressBuilder,
 
     /// Custom progress Widget, case it is null, will be used the global or default
-    Widget progressWidget,
+    Widget? progressWidget,
 
     /// Custom theme, case it is null, will be used the global or default
-    MPickerTheme theme,
+    MPickerTheme? theme,
 
     /// Custom Marker, case it is null, will be used the global or default
-    Widget marker,
+    Widget? marker,
   }) =>
       MapPicker._internal(
-          progressWidget: progressWidget ?? _progressWidget,
+          progressWidget:
+              progressWidget ?? _progressWidget ?? CircularProgressIndicator(),
           addressBuilder: addressBuilder ?? _addressBuilder,
           searchBuilder: searchBuilder ?? _searchBuilder,
           marker: marker ?? _markerWidget,
@@ -87,8 +89,8 @@ class MapPicker extends StatelessWidget {
       this.searchBuilder,
       this.addressBuilder,
       this.progressWidget,
-      @required this.controller,
-      @required this.theme});
+      required this.controller,
+      required this.theme});
 
   dispose() => controller.dispose();
 
@@ -136,7 +138,7 @@ class MapPicker extends StatelessWidget {
             left: 0,
             top: 0,
             child: searchBuilder != null
-                ? searchBuilder(controller.getAddressByAddress)
+                ? searchBuilder!(controller.getAddressByAddress)
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -177,7 +179,7 @@ class MapPicker extends StatelessWidget {
             child: StreamBuilder<bool>(
                 stream: controller.outStreamProgress,
                 initialData: true,
-                builder: (c, s) => s.data
+                builder: (c, s) => (s.data ?? true)
                     ? (progressWidget ??
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -187,11 +189,11 @@ class MapPicker extends StatelessWidget {
                                 child: CircularProgressIndicator())
                           ],
                         ))
-                    : StreamBuilder<MPAddress>(
+                    : StreamBuilder<MPAddress?>(
                         stream: controller.outStreamAddress,
                         builder: (c, ad) => (addressBuilder != null
-                            ? addressBuilder(
-                                ad?.data?.formattedAddress ??
+                            ? addressBuilder!(
+                                ad.data?.formattedAddress ??
                                     theme.withoutAddress,
                                 dispose)
                             : Row(
@@ -209,7 +211,7 @@ class MapPicker extends StatelessWidget {
                                               alignment: Alignment.center,
                                               width: width * .4 - 40,
                                               child: Text(
-                                                  ad?.data?.formattedAddress ??
+                                                  ad.data?.formattedAddress ??
                                                       theme.withoutAddress,
                                                   textAlign:
                                                       TextAlign.center))))

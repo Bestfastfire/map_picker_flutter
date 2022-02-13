@@ -1,3 +1,5 @@
+## [1.1.0] - Null Safety
+
 ## [1.0.0+8] - Update dependencies
 
 ## [1.0.0+7] - Update dependencies
