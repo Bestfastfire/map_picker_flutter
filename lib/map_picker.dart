@@ -118,7 +118,7 @@ class MapPicker extends StatelessWidget {
                 controller: controller.ctMap,
                 builder: (context, x, y, z) {
                   final url =
-                      'http://mt1.google.com/vt/lyrs=m@129&x=$x&y=$y&z=$z';
+                      'https://mt1.google.com/vt/lyrs=m@129&x=$x&y=$y&z=$z';
 
                   return CachedNetworkImage(
                       errorWidget: (c, w, s) => CircularProgressIndicator(),
